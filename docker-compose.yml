@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  contact_db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+  contact_app:
+    image: contact-api:dev
+    ports:
+      - "1000:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+    depends_on:
+      - contact_db
