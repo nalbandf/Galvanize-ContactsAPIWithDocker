@@ -39,4 +39,19 @@ public class ContactController {
 
     }
 
+    @DeleteMapping("/contact/{id}")
+    public ResponseEntity<ContactResponse> deleteContactById(@PathVariable (required=true, name="id") int id ){
+
+        ContactResponse contactResponse =
+                contactService.deleteContactById(id);
+
+        if(contactResponse.getMessage() == null ) {
+            return new ResponseEntity(contactResponse, HttpStatus.OK);
+        }else{
+            return new ResponseEntity(contactResponse, HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+
 }

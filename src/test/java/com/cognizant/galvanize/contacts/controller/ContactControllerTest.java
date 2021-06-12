@@ -18,8 +18,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -448,5 +447,22 @@ public class ContactControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.contactBeanResponseList[0].id", is(1)));
     }
+
+    //DELETE /contact/{id} -- deletes the contact from the database returns 200 if ID is in database or 404 if not.
+    @Test
+    public void testDeleteContactAndFoundContactDeletedWithSuccessReturnMessage() throws Exception {
+        ContactBean contactBean = new ContactBean();
+        contactBean.setId(1);
+        contactBean.setGivenName("John");
+        contactBean.setSurName("Doe");
+        contactBean.setPhoneNumber("111-1111-1111");
+
+
+        when(mockContactRepository.findById(1)).thenReturn(java.util.Optional.of(contactBean));
+
+        RequestBuilder requestBuilder = delete("/contact/1");
+        mockMvc.perform(requestBuilder).andExpect(status().isOk());
+    }
+
 
 }

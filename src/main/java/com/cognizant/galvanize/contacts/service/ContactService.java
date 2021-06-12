@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -97,5 +98,19 @@ public class ContactService {
             response.setMessage(ContactResponse.NO_DATA_CREATED);
            return response;
         }
+    }
+    public ContactResponse deleteContactById(int id) {
+       Optional <ContactBean> contactBean = contactRepository.findById(id);
+       ContactResponse response = new ContactResponse();
+        if(contactBean.isPresent()) {
+            contactRepository.deleteById(id);
+            response.setContactBeanResponseList(Arrays.asList(contactBean.get()));
+            return response;
+        }else{
+            response.setMessage(ContactResponse.NO_DATA_DELETED);
+            return response;
+        }
+
+
     }
 }

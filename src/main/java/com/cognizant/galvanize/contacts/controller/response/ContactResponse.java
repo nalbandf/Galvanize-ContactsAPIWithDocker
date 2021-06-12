@@ -13,6 +13,8 @@ public class ContactResponse {
 
     public static final String NO_DATA_PRESENT = "No data found";
     public static final String NO_DATA_CREATED = "No data created";
+    public static final String NO_DATA_DELETED = "No data deleted";
+
     @JsonProperty
     private Iterable<ContactBean> contactBeanResponseList;
 
