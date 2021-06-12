@@ -26,6 +26,13 @@ public class ContactController {
         return new ResponseEntity(contactResponse, HttpStatus.OK);
     }
 
+    @GetMapping("/contacts/{id}")
+    public ResponseEntity<ContactResponse> getContactsById(@PathVariable int id) {
+        ContactResponse contactResponse =
+                contactService.getContactsById(id);
+        return new ResponseEntity(contactResponse, HttpStatus.OK);
+    }
+
     @PostMapping("/contact")
     public ResponseEntity<ContactResponse>  create(@RequestBody ContactBean contact) {
 

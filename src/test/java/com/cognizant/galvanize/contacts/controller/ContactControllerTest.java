@@ -464,5 +464,25 @@ public class ContactControllerTest {
         mockMvc.perform(requestBuilder).andExpect(status().isOk());
     }
 
+    // GET BY ID
+    @Test
+    public void testIfRequestContactByIdAndOneContactFoundThenReturnResponseWithOneContact() throws Exception {
+        // ONE CONDITION
 
+        // Arrange
+        ContactBean contactBean = new ContactBean();
+        contactBean.setId(1);
+        contactBean.setGivenName("John");
+        contactBean.setSurName("Doe");
+        contactBean.setPhoneNumber("111-1111-1111");
+
+        when(mockContactRepository.findById(any())).thenReturn(java.util.Optional.of(contactBean));
+
+        // Act &  // Assert
+        RequestBuilder requestBuilder = get("/contacts/1");
+        mockMvc.perform(requestBuilder).andExpect(status().isOk())
+                //        .andExpect(jsonPath("$[0]").doesNotExist())
+                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is(1)))
+                .andExpect(jsonPath("$.contactBeanResponseList[0].givenName", is("John")));
+    }
 }

@@ -113,4 +113,17 @@ public class ContactService {
 
 
     }
+
+    public ContactResponse getContactsById(int id) {
+        Optional <ContactBean> contactBean = contactRepository.findById(id);
+        ContactResponse response = new ContactResponse();
+        if(contactBean.isPresent()) {
+            response.setContactBeanResponseList(Arrays.asList(contactBean.get()));
+            return response;
+        }else{
+            response.setMessage(ContactResponse.NO_DATA_PRESENT);
+            return response;
+        }
+
+    }
 }
