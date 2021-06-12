@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,9 +18,11 @@ public class ContactController {
     private ContactService contactService;
 
     @GetMapping("/contacts")
-    public ResponseEntity<ContactResponse> getContacts() {
+    public ResponseEntity<ContactResponse> getContacts(@RequestParam (required = false, name = "givenName") String givenName,
+                                                       @RequestParam (required = false, name = "surName") String surName) {
+
         ContactResponse contactResponse =
-                contactService.getContacts();
+                contactService.getContacts(givenName, surName);
         return new ResponseEntity(contactResponse, HttpStatus.OK);
     }
 
