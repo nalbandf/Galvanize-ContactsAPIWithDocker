@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 
@@ -83,4 +84,131 @@ public class ContactControllerTest {
                 //        .andExpect(jsonPath("$[0]").doesNotExist())
                 .andExpect(jsonPath("$.contactBeanResponseList[0].id", is("1")));
     }
+
+    @Test
+    public void testIfRequestContactsAndManyContactFoundThenReturnResponseWithManyContact() throws Exception {
+        // MANY CONDITION
+
+        // Arrange
+        ContactBean contactBean = new ContactBean();
+        contactBean.setId("1");
+        contactBean.setGivenName("John");
+        contactBean.setSurName("Doe");
+        contactBean.setPhoneNumber("111-1111-1111");
+
+        ContactBean contactBean1 = new ContactBean();
+        contactBean1.setId("2");
+        contactBean1.setGivenName("Fred");
+        contactBean1.setSurName("Chris");
+        contactBean1.setPhoneNumber("222-2222-2222");
+
+        List<ContactBean> contactBeanList = new ArrayList<>();
+        contactBeanList.add(contactBean);
+        contactBeanList.add(contactBean1);
+
+        when(mockContactRepository.findAll()).thenReturn(contactBeanList);
+
+        // Act &  // Assert
+        RequestBuilder requestBuilder = get("/contacts");
+        mockMvc.perform(requestBuilder).andExpect(status().isOk())
+                //        .andExpect(jsonPath("$[0]").doesNotExist())
+                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is("1")));
+    }
+
+    //GET /contacts?givenname=, surname= --returns a list of contacts matching the provided parameters. Both are optional, making this a modification to GET /contacts.
+
+    @Test
+    public void testIfSearchContactsByGivenNameAndNoContactsFoundThenReturnResponseWithErrorMessage() throws Exception {
+        // ZERO CONDITION
+
+        // Arrange
+        List<ContactBean> emptyContactBeanList = new ArrayList<>();
+        when(mockContactRepository.findAll()).thenReturn(emptyContactBeanList);
+
+        // Act &  // Assert
+        RequestBuilder requestBuilder = get("/contacts").requestAttr("givenName","some");
+        mockMvc.perform(requestBuilder).andExpect(status().isOk())
+                //        .andExpect(jsonPath("$[0]").doesNotExist())
+                .andExpect(jsonPath("$.message", is("No data found")))
+                .andExpect(content().string("{\"message\":\"No data found\"}"));
+    }
+
+    @Test
+    public void testIfSearchContactsByIncorrectGivenNameAndNoContactsFoundThenReturnResponseWithErrorMessage() throws Exception {
+        // ZERO CONDITION
+
+        // Arrange
+        ContactBean contactBean = new ContactBean();
+        contactBean.setId("1");
+        contactBean.setGivenName("John");
+        contactBean.setSurName("Doe");
+        contactBean.setPhoneNumber("111-1111-1111");
+
+        List<ContactBean> contactBeanList = new ArrayList<>();
+        contactBeanList.add(contactBean);
+        when(mockContactRepository.findByGivenName("John")).thenReturn(contactBeanList);
+
+        // Act &  // Assert
+        RequestBuilder requestBuilder = get("/contacts").param("givenName","Some")
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder).andExpect(status().isOk())
+                //        .andExpect(jsonPath("$[0]").doesNotExist())
+                .andExpect(jsonPath("$.message", is("No data found")));
+    }
+
+    @Test
+    public void testIfSearchContactsByGivenNameAndOneContactsFoundThenReturnResponseOneContact() throws Exception {
+        // ONE CONDITION
+
+        // Arrange
+        ContactBean contactBean = new ContactBean();
+        contactBean.setId("1");
+        contactBean.setGivenName("John");
+        contactBean.setSurName("Doe");
+        contactBean.setPhoneNumber("111-1111-1111");
+
+        List<ContactBean> contactBeanList = new ArrayList<>();
+        contactBeanList.add(contactBean);
+        when(mockContactRepository.findByGivenName("John")).thenReturn(contactBeanList);
+
+        // Act &  // Assert
+        RequestBuilder requestBuilder = get("/contacts").param("givenName","John")
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder).andExpect(status().isOk())
+                //        .andExpect(jsonPath("$[0]").doesNotExist())
+                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is("1")));
+    }
+
+    @Test
+    public void testIfSearchContactsByGivenNameAndManyContactsFoundThenReturnResponseManyContact() throws Exception {
+        // MANY CONDITION
+
+        // Arrange
+        ContactBean contactBean = new ContactBean();
+        contactBean.setId("1");
+        contactBean.setGivenName("John");
+        contactBean.setSurName("Doe");
+        contactBean.setPhoneNumber("111-1111-1111");
+
+        ContactBean contactBean1 = new ContactBean();
+        contactBean1.setId("2");
+        contactBean1.setGivenName("John");
+        contactBean1.setSurName("Chris");
+        contactBean1.setPhoneNumber("222-2222-2222");
+
+        List<ContactBean> contactBeanList = new ArrayList<>();
+        contactBeanList.add(contactBean);
+        contactBeanList.add(contactBean1);
+        when(mockContactRepository.findAll()).thenReturn(contactBeanList);
+
+        // Act &  // Assert
+        RequestBuilder requestBuilder = get("/contacts").requestAttr("givenName","John");
+        mockMvc.perform(requestBuilder).andExpect(status().isOk())
+                //        .andExpect(jsonPath("$[0]").doesNotExist())
+                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is("1")))
+                .andExpect(jsonPath("$.contactBeanResponseList[1].id", is("2")));
+    }
+
+
+
 }
