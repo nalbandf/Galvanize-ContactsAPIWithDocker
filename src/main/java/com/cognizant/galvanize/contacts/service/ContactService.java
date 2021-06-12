@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,5 +85,17 @@ public class ContactService {
         }
 
         return response;
+    }
+
+    public ContactResponse addContact(ContactBean contact) {
+        ContactBean contactBean = contactRepository.save(contact);
+
+        if(contactBean !=null && contactBean.getGivenName() != null) {
+            return convertToContactResponse(Arrays.asList(contactBean));
+        }else{
+            ContactResponse response = new ContactResponse();
+            response.setMessage(ContactResponse.NO_DATA_CREATED);
+           return response;
+        }
     }
 }

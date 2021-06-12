@@ -13,12 +13,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -69,7 +70,7 @@ public class ContactControllerTest {
 
         // Arrange
         ContactBean contactBean = new ContactBean();
-        contactBean.setId("1");
+        contactBean.setId(1);
         contactBean.setGivenName("John");
         contactBean.setSurName("Doe");
         contactBean.setPhoneNumber("111-1111-1111");
@@ -83,7 +84,7 @@ public class ContactControllerTest {
         RequestBuilder requestBuilder = get("/contacts");
         mockMvc.perform(requestBuilder).andExpect(status().isOk())
                 //        .andExpect(jsonPath("$[0]").doesNotExist())
-                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is("1")));
+                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is(1)));
     }
 
     @Test
@@ -92,13 +93,13 @@ public class ContactControllerTest {
 
         // Arrange
         ContactBean contactBean = new ContactBean();
-        contactBean.setId("1");
+        contactBean.setId(1);
         contactBean.setGivenName("John");
         contactBean.setSurName("Doe");
         contactBean.setPhoneNumber("111-1111-1111");
 
         ContactBean contactBean1 = new ContactBean();
-        contactBean1.setId("2");
+        contactBean1.setId(2);
         contactBean1.setGivenName("Fred");
         contactBean1.setSurName("Chris");
         contactBean1.setPhoneNumber("222-2222-2222");
@@ -113,7 +114,7 @@ public class ContactControllerTest {
         RequestBuilder requestBuilder = get("/contacts");
         mockMvc.perform(requestBuilder).andExpect(status().isOk())
                 //        .andExpect(jsonPath("$[0]").doesNotExist())
-                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is("1")));
+                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is(1)));
     }
 
     //GET /contacts?givenname=, surname= --returns a list of contacts matching the provided parameters. Both are optional, making this a modification to GET /contacts.
@@ -140,7 +141,7 @@ public class ContactControllerTest {
 
         // Arrange
         ContactBean contactBean = new ContactBean();
-        contactBean.setId("1");
+        contactBean.setId(1);
         contactBean.setGivenName("John");
         contactBean.setSurName("Doe");
         contactBean.setPhoneNumber("111-1111-1111");
@@ -163,7 +164,7 @@ public class ContactControllerTest {
 
         // Arrange
         ContactBean contactBean = new ContactBean();
-        contactBean.setId("1");
+        contactBean.setId(1);
         contactBean.setGivenName("John");
         contactBean.setSurName("Doe");
         contactBean.setPhoneNumber("111-1111-1111");
@@ -177,7 +178,7 @@ public class ContactControllerTest {
                 .contentType(MediaType.APPLICATION_JSON);
         mockMvc.perform(requestBuilder).andExpect(status().isOk())
                 //        .andExpect(jsonPath("$[0]").doesNotExist())
-                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is("1")));
+                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is(1)));
     }
 
     @Test
@@ -186,13 +187,13 @@ public class ContactControllerTest {
 
         // Arrange
         ContactBean contactBean = new ContactBean();
-        contactBean.setId("1");
+        contactBean.setId(1);
         contactBean.setGivenName("John");
         contactBean.setSurName("Doe");
         contactBean.setPhoneNumber("111-1111-1111");
 
         ContactBean contactBean1 = new ContactBean();
-        contactBean1.setId("2");
+        contactBean1.setId(2);
         contactBean1.setGivenName("John");
         contactBean1.setSurName("Chris");
         contactBean1.setPhoneNumber("222-2222-2222");
@@ -206,8 +207,8 @@ public class ContactControllerTest {
         RequestBuilder requestBuilder = get("/contacts").param("givenName", "John");
         mockMvc.perform(requestBuilder).andExpect(status().isOk())
                 //        .andExpect(jsonPath("$[0]").doesNotExist())
-                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is("1")))
-                .andExpect(jsonPath("$.contactBeanResponseList[1].id", is("2")));
+                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is(1)))
+                .andExpect(jsonPath("$.contactBeanResponseList[1].id", is(2)));
     }
 
     // SURNAME TESTS
@@ -234,7 +235,7 @@ public class ContactControllerTest {
 
         // Arrange
         ContactBean contactBean = new ContactBean();
-        contactBean.setId("1");
+        contactBean.setId(1);
         contactBean.setGivenName("John");
         contactBean.setSurName("Doe");
         contactBean.setPhoneNumber("111-1111-1111");
@@ -257,7 +258,7 @@ public class ContactControllerTest {
 
         // Arrange
         ContactBean contactBean = new ContactBean();
-        contactBean.setId("1");
+        contactBean.setId(1);
         contactBean.setGivenName("John");
         contactBean.setSurName("Doe");
         contactBean.setPhoneNumber("111-1111-1111");
@@ -271,7 +272,7 @@ public class ContactControllerTest {
                 .contentType(MediaType.APPLICATION_JSON);
         mockMvc.perform(requestBuilder).andExpect(status().isOk())
                 //        .andExpect(jsonPath("$[0]").doesNotExist())
-                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is("1")));
+                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is(1)));
     }
 
     @Test
@@ -280,13 +281,13 @@ public class ContactControllerTest {
 
         // Arrange
         ContactBean contactBean = new ContactBean();
-        contactBean.setId("1");
+        contactBean.setId(1);
         contactBean.setGivenName("John");
         contactBean.setSurName("Doe");
         contactBean.setPhoneNumber("111-1111-1111");
 
         ContactBean contactBean1 = new ContactBean();
-        contactBean1.setId("2");
+        contactBean1.setId(2);
         contactBean1.setGivenName("Chris");
         contactBean1.setSurName("Doe");
         contactBean1.setPhoneNumber("222-2222-2222");
@@ -301,8 +302,8 @@ public class ContactControllerTest {
                 .param("surName", "Doe");
         mockMvc.perform(requestBuilder).andExpect(status().isOk())
                 //        .andExpect(jsonPath("$[0]").doesNotExist())
-                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is("1")))
-                .andExpect(jsonPath("$.contactBeanResponseList[1].id", is("2")));
+                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is(1)))
+                .andExpect(jsonPath("$.contactBeanResponseList[1].id", is(2)));
     }
 
 
@@ -332,7 +333,7 @@ public class ContactControllerTest {
 
         // Arrange
         ContactBean contactBean = new ContactBean();
-        contactBean.setId("1");
+        contactBean.setId(1);
         contactBean.setGivenName("John");
         contactBean.setSurName("Doe");
         contactBean.setPhoneNumber("111-1111-1111");
@@ -358,7 +359,7 @@ public class ContactControllerTest {
 
         // Arrange
         ContactBean contactBean = new ContactBean();
-        contactBean.setId("1");
+        contactBean.setId(1);
         contactBean.setGivenName("John");
         contactBean.setSurName("Doe");
         contactBean.setPhoneNumber("111-1111-1111");
@@ -375,7 +376,7 @@ public class ContactControllerTest {
                 .contentType(MediaType.APPLICATION_JSON);
         mockMvc.perform(requestBuilder).andExpect(status().isOk())
                 //        .andExpect(jsonPath("$[0]").doesNotExist())
-                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is("1")));
+                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is(1)));
     }
 
     @Test
@@ -384,19 +385,19 @@ public class ContactControllerTest {
 
         // Arrange
         ContactBean contactBean = new ContactBean();
-        contactBean.setId("1");
+        contactBean.setId(1);
         contactBean.setGivenName("John");
         contactBean.setSurName("Doe");
         contactBean.setPhoneNumber("111-1111-1111");
 
         ContactBean contactBean1 = new ContactBean();
-        contactBean1.setId("2");
+        contactBean1.setId(2);
         contactBean1.setGivenName("Chris");
         contactBean1.setSurName("Doe");
         contactBean1.setPhoneNumber("222-2222-2222");
 
         ContactBean contactBean3 = new ContactBean();
-        contactBean3.setId("3");
+        contactBean3.setId(3);
         contactBean3.setGivenName("John");
         contactBean3.setSurName("Doe");
         contactBean3.setPhoneNumber("333-3333-3333");
@@ -419,10 +420,33 @@ public class ContactControllerTest {
                 .param("surName", "Doe");
         mockMvc.perform(requestBuilder).andExpect(status().isOk())
                 //        .andExpect(jsonPath("$[0]").doesNotExist())
-                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is("1")))
-                .andExpect(jsonPath("$.contactBeanResponseList[1].id", is("3")));
+                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is(1)))
+                .andExpect(jsonPath("$.contactBeanResponseList[1].id", is(3)));
 
     }
 
+    @Test
+    public void testCreateContact() throws Exception {
+        String contactStr = "{\n" +
+                "  \"givenName\": \"John\",\n" +
+                "  \"surName\": \"Doe\",\n" +
+                "  \"phoneNumber\": \"222-111-0000\"\n" +
+                "\n" +
+                "}";
+        ContactBean contactBean = new ContactBean();
+        contactBean.setId(1);
+        contactBean.setGivenName("John");
+        contactBean.setSurName("Doe");
+        contactBean.setPhoneNumber("111-1111-1111");
+
+        when(mockContactRepository.save(any(ContactBean.class))).thenReturn(contactBean);
+
+        RequestBuilder request = post("/contact")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(contactStr);
+        mockMvc.perform(request)
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.contactBeanResponseList[0].id", is(1)));
+    }
 
 }
